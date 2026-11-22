@@ -1,0 +1,69 @@
+# golangci-lint v2 configuration. Docs: https://golangci-lint.run/usage/configuration/
+# Validate after editing with: golangci-lint config verify
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true # lint test files too; test code is production code for your confidence
+
+linters:
+  # "standard" = errcheck, govet, ineffassign, staticcheck, unused.
+  default: standard
+  enable:
+    - bodyclose     # HTTP response bodies must be closed (leaks connections to the LLM API)
+    - contextcheck  # functions must pass the ctx they received, not create a fresh one
+    - errorlint     # use errors.Is/As and %w, never == or string matching on errors
+    - gosec         # security: SQL injection, weak crypto, file permissions, ...
+    - noctx         # HTTP requests must carry a context (so they can time out / cancel)
+    - revive        # style + exported-identifier doc comments
+    - sloglint      # consistent structured logging with log/slog
+    - misspell      # typos in comments and strings
+    - nilerr        # returning nil when an error was checked (silently swallowing it)
+    - unconvert     # unnecessary type conversions
+
+  settings:
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment # micro-optimisation; hurts readability for no real gain here
+        - shadow         # too noisy for `err` re-declarations; revisit later
+    errcheck:
+      check-type-assertions: true # `v := x.(T)` without `, ok` panics at runtime
+    sloglint:
+      kv-only: true      # always slog.Info("msg", "key", val) — one style everywhere
+      no-raw-keys: false
+    revive:
+      rules:
+        - name: exported          # exported identifiers need doc comments
+        - name: package-comments  # every package explains its purpose (doc.go)
+        - name: context-as-argument
+        - name: error-return
+        - name: error-strings     # errors start lowercase, no trailing punctuation
+        - name: error-naming
+        - name: receiver-naming
+        - name: var-naming
+        - name: indent-error-flow # handle errors early, keep the happy path unindented
+        - name: unused-parameter
+        - name: unexported-return
+
+  exclusions:
+    presets:
+      - std-error-handling # e.g. unchecked `defer f.Close()` on read-only files
+    rules:
+      # Tests may use fixed file paths, weak randomness, etc.
+      - path: _test\.go
+        linters: [gosec]
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      # Group our own imports separately from third-party ones.
+      local-prefixes:
+        - github.com/imrancluster/ops-agent
+
+issues:
+  max-issues-per-linter: 0 # show everything, never hide issues
+  max-same-issues: 0
