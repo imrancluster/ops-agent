@@ -1,0 +1,39 @@
+# --- Secrets (never commit) ---------------------------------------------
+# .env holds real API keys. .env.example (fake values) IS committed.
+.env
+.env.*
+!.env.example
+
+# --- Build output --------------------------------------------------------
+/bin/
+/dist/
+*.exe
+*.test
+
+# --- Test & coverage artifacts -----------------------------------------
+*.out
+coverage.*
+*.prof
+
+# --- Runtime data the agent creates --------------------------------------
+# Session memory, vector store, audit/ticket logs. Data, not source code.
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.jsonl
+!testdata/**/*.jsonl
+/evals/results/
+
+# --- Tooling state ------------------------------------------------------
+# Claude Code hook state (per-machine, not part of the project).
+.claude-flow/
+# Personal Claude Code settings (shared ones live in .claude/settings.json).
+.claude/settings.local.json
+
+# --- OS / editor noise ---------------------------------------------------
+.DS_Store
+.idea/
+.vscode/
+*.swp
+GO-AI-AGENT.md

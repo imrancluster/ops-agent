@@ -1,0 +1,23 @@
+# https://editorconfig.org: keeps every editor consistent across your Macs and Windows laptops.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# gofmt decides Go formatting: tabs. Never fight it.
+[*.go]
+indent_style = tab
+
+[Makefile]
+indent_style = tab
+
+[*.{yml,yaml,json,md}]
+indent_style = space
+indent_size = 2
+
+# Two trailing spaces mean a line break in Markdown, so keep them.
+[*.md]
+trim_trailing_whitespace = false
