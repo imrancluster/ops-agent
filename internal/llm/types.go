@@ -46,9 +46,6 @@ const (
 // Fields that don't belong to the block's Type must be left out of the JSON
 // entirely, not sent as "" or false.
 type ContentBlock struct {
-	// TestRequestMarshalGolden and TestResponseUnmarshal pass.
-	// Look at testdata/*.json for the exact field names.
-	// Hint: `json:"name,omitzero"` leaves a field out when it holds its zero value.
 	Type BlockType `json:"type"`
 	Text string    `json:"text,omitzero"`
 
@@ -106,9 +103,9 @@ func (r *Response) Text() string {
 
 	var sb strings.Builder
 
-	for _, content := range r.Content {
-		if content.Type == BlockText {
-			sb.WriteString(content.Text)
+	for _, block := range r.Content {
+		if block.Type == BlockText {
+			sb.WriteString(block.Text)
 		}
 	}
 
