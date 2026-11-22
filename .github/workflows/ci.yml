@@ -1,0 +1,52 @@
+# CI: runs the same `make check` you run locally, plus a vulnerability scan.
+# Rule: if `make check` is green on your laptop, this must be green too.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Least privilege: this workflow only needs to read the code.
+permissions:
+  contents: read
+
+# A newer push to the same branch cancels the older, now-irrelevant run.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod # single source of truth for the Go version
+          cache: true             # caches modules + build cache between runs
+
+      # Pinned linter version: a new release can never break CI by surprise.
+      # Keep in sync with the version on your machine (`golangci-lint version`).
+      - uses: golangci/golangci-lint-action@v8
+        with:
+          version: v2.15.0
+          install-only: true
+
+      - name: make check (fmt, vet, lint, test with -race)
+        run: make check
+
+  vuln:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - name: govulncheck
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@latest
+          govulncheck ./...
