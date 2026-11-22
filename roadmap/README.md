@@ -37,7 +37,7 @@ The order follows the guide's 12-week plan (§10). There are two deliberate chan
 
 | # | Milestone | Guide | Week | Status |
 | --- | --- | --- | --- | --- |
-| [M00](00-foundations.md) | Engineering foundations: git, Makefile, lint, CI, ADRs | §3 | 0 | ☐ |
+| [M00](00-foundations.md) | Engineering foundations: git, Makefile, lint, CI, ADRs | §3 | 0 | ✅ |
 | [M01](01-llm-client.md) | Talking to an LLM: neutral types, `Provider`, Ollama adapter | §5 step 1, §5ক | 1 | ☐ |
 | [M02](02-tool-registry.md) | Tools: schema, descriptions, registry | §5 step 2 | 2 | ☐ |
 | [M03](03-agent-loop.md) | The agent loop + REPL + loop unit tests | §5 step 3, §7 step 8a | 2 | ☐ |

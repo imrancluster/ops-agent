@@ -49,7 +49,8 @@ Production agents almost always put a **provider-neutral layer** between the age
 - **You implement:** both translation functions and `Send`:
   - Turn `tool_result` blocks into `role:"tool"` messages.
   - Generate tool-call IDs, keeping track of which ID maps to which tool name.
-  - Map `done_reason` plus the presence of tool calls to `StopToolUse` or `StopEndTurn`.
+  - Map to `StopToolUse` when `tool_calls` is non-empty (Ollama 0.40 sends `done_reason: "stop"` even for tool calls, see notes/m00.md §6), `StopMaxTokens` on `done_reason: "length"`, otherwise `StopEndTurn`.
+  - Use the tool-call `id` when Ollama sends one; generate an ID only when it's missing.
   - Return `*APIError` for status codes other than 200.
 - **Done when:** the contract tests pass, including one where Ollama returns two tool calls in a single reply.
 
