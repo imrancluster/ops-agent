@@ -22,6 +22,10 @@ Production agents almost always put a **provider-neutral layer** between the age
 
 ## Go you'll use
 
+> **JSON v2 (ADR 0001):** this project uses `encoding/json/v2` + `encoding/json/jsontext`, not the
+> guide's v1. Read `json.RawMessage` below as **`jsontext.Value`**, prefer the `omitzero` tag option,
+> and remember v2 matches field names **case-sensitively** by default.
+
 - **Struct tags and `omitempty`:** `json:"tool_use_id,omitempty"` controls the field name and leaves the field out when it is empty.
 - **`json.RawMessage`:** keeps tool input/schema JSON as raw bytes, because its shape isn't known ahead of time.
 - **Interfaces:** `type Provider interface { Send(ctx, Request) (*Response, error) }`. Any type that has this method satisfies the interface automatically; Go has no `implements` keyword.

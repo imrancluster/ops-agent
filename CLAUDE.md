@@ -8,6 +8,7 @@ This repo is an early scaffold for **Ops Agent**, a framework-free AI agent writ
 
 `GO-AI-AGENT.md` (written in Bangla) is the design spec and step-by-step build guide. It contains reference code for each package. When you implement a step, read the matching section first. Two adjustments apply to its code:
 - Its imports use `github.com/<your-name>/ops-agent/...`. Use the real module path `github.com/imrancluster/ops-agent/...`.
+- Its code uses `encoding/json` (v1). This project uses **`encoding/json/v2`** (stable in Go 1.27, see `docs/adr/0001`): `json.RawMessage` → `jsontext.Value`, prefer `omitzero`, and name matching is case-sensitive.
 - It says its code is simplified for teaching. Check what you take from it with `go vet` and tests.
 
 Guide sections by step: §5 steps 1–3 (LLM types, tool registry, agent loop, `main.go`), §5ক providers (Ollama, OpenAI-compatible, `.env`), §6 steps 4–6 (real tools, memory/RAG, guardrails), §7 steps 7–10 (MCP, evals, observability, multi-agent, deploy), §8 AgentOps (`agent.yaml`).
