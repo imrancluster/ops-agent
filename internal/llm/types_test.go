@@ -109,6 +109,13 @@ func TestResponseText(t *testing.T) {
 			{Type: BlockText, Text: "checking"},
 		}, "checking"},
 		{"only tool_use", []ContentBlock{{Type: BlockToolUse, ID: "t1"}}, ""},
+		// Text() must decide by Type, not by "Text happens to be empty".
+		// A future block type (e.g. the model's hidden "thinking") may carry
+		// text that must never reach the user.
+		{"ignores Text on non-text blocks", []ContentBlock{
+			{Type: "thinking", Text: "secret reasoning"},
+			{Type: BlockText, Text: "answer"},
+		}, "answer"},
 		{"bangla text survives", []ContentBlock{{Type: BlockText, Text: "আজ রবিবার"}}, "আজ রবিবার"},
 	}
 	for _, tt := range tests {

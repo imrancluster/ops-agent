@@ -46,7 +46,6 @@ const (
 // Fields that don't belong to the block's Type must be left out of the JSON
 // entirely, not sent as "" or false.
 type ContentBlock struct {
-	// TODO(you): add json/v2 struct tags to every field so that
 	// TestRequestMarshalGolden and TestResponseUnmarshal pass.
 	// Look at testdata/*.json for the exact field names.
 	// Hint: `json:"name,omitzero"` leaves a field out when it holds its zero value.
@@ -80,11 +79,11 @@ type Tool struct {
 // Request is everything we send to the model in one call. The API is stateless,
 // so Messages must contain the whole conversation every time.
 type Request struct {
-	Model     string    `json:"model,omitzero"` // TODO(you): json tag. Empty = provider's default model.
+	Model     string    `json:"model,omitzero"`
 	MaxTokens int       `json:"max_tokens"`
-	System    string    `json:"system,omitzero"` // TODO(you): json tag. Omit when empty.
+	System    string    `json:"system,omitzero"`
 	Messages  []Message `json:"messages"`
-	Tools     []Tool    `json:"tools,omitzero"` // TODO(you): json tag. Omit when there are no tools.
+	Tools     []Tool    `json:"tools,omitzero"`
 }
 
 // Usage counts tokens: the unit providers bill by and context limits are measured in.
@@ -108,7 +107,9 @@ func (r *Response) Text() string {
 	var sb strings.Builder
 
 	for _, content := range r.Content {
-		sb.WriteString(content.Text)
+		if content.Type == BlockText {
+			sb.WriteString(content.Text)
+		}
 	}
 
 	return sb.String()
