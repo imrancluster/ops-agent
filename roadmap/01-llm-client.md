@@ -41,8 +41,8 @@ Production agents almost always put a **provider-neutral layer** between the age
 - **You implement:** make the golden test pass. Then explain why `Input` is a `json.RawMessage` and not a `map[string]any`.
 
 ### Task 2: The `APIError` type
-- An improvement over the guide, which formats status codes into strings: `type APIError struct { Provider string; Status int; Body string }` with an `Error()` method, plus `func (e *APIError) Temporary() bool` (true for 429/5xx).
-- **You implement:** the struct, the methods, and a table-driven test covering 200/400/429/500/529.
+- An improvement over the guide, which formats status codes into strings: `type APIError struct { Provider string; Status int; Body string }` with an `Error()` method, plus `func (e *APIError) Retryable() bool` (true for 429/5xx; named `Retryable`, not `Temporary`, see notes/m01.md).
+- **You implement:** the struct, the methods, and a table-driven test covering 200/400/401/404/429/500/502/503/529.
 
 ### Task 3: The Ollama adapter (`internal/llm/ollama.go`)
 - **Claude scaffolds:** the `Ollama` struct, the `ollama*` wire types, the function signatures `toOllama(Request) ollamaRequest` and `fromOllama(ollamaResponse) *Response`, and `ollama_test.go`, which uses `httptest` to check the request body and to return a canned tool-call response.
