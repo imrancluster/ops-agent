@@ -40,7 +40,7 @@ Therefore: **security lives in code, never only in the prompt.** The prompt can 
 
 ### Task 2: Retry decorator
 - **Claude scaffolds:** `internal/llm/retry.go` signature, and tests with a fake that fails N times. Inject a fake clock or sleep so the tests run instantly.
-- **You implement:** retry only when `APIError.Temporary()` is true, with at most 4 attempts, exponential backoff plus jitter, and respect for `ctx` cancellation.
+- **You implement:** retry only when `APIError.Retryable()` is true, with at most 4 attempts, exponential backoff plus jitter, and respect for `ctx` cancellation.
 
 ### Task 3: Guard
 - **Claude scaffolds:** `internal/agent/guard.go` with a `Decision` (Allow/Deny/Ask) and a `Guard` interface. The loop calls it before every tool.
